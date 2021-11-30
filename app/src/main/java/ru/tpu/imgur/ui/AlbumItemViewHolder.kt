@@ -20,56 +20,56 @@ import kotlin.math.min
 private const val MAX_HEIGHT_PHOTO_SCREEN_FACTOR = 0.8f
 
 class AlbumItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-	private val photo: SimpleDraweeView = itemView.findViewById(R.id.photo_view)
-	private val description: TextView = itemView.findViewById(R.id.description)
+    private val photo: SimpleDraweeView = itemView.findViewById(R.id.photo_view)
+    private val description: TextView = itemView.findViewById(R.id.description)
 
-	fun showImage(image: UiImgurAlbum) {
-		val resizeOptions = ResizeOptions(
-			getWindowSize(photo.context).x,
-			getPhotoViewHeight(
-				getWindowSize(photo.context),
-				image.width,
-				image.height
-			)
-		)
-		val params: ViewGroup.LayoutParams = photo.layoutParams
-		params.height = resizeOptions.height
-		params.width = resizeOptions.width
-		photo.layoutParams = params
+    fun showImage(image: UiImgurAlbum) {
+        val resizeOptions = ResizeOptions(
+            getWindowSize(photo.context).x,
+            getPhotoViewHeight(
+                getWindowSize(photo.context),
+                image.width,
+                image.height
+            )
+        )
+        val params: ViewGroup.LayoutParams = photo.layoutParams
+        params.height = resizeOptions.height
+        params.width = resizeOptions.width
+        photo.layoutParams = params
 
-		val request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(image.url))
-			.setResizeOptions(resizeOptions)
-			.build()
-		val controller = Fresco.newDraweeControllerBuilder()
-			.setOldController(photo.controller)
-			.setAutoPlayAnimations(true)
-			.setImageRequest(request)
-			.build()
-		photo.controller = controller
+        val request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(image.url))
+            .setResizeOptions(resizeOptions)
+            .build()
+        val controller = Fresco.newDraweeControllerBuilder()
+            .setOldController(photo.controller)
+            .setAutoPlayAnimations(true)
+            .setImageRequest(request)
+            .build()
+        photo.controller = controller
 
-		description.text = image.description
-	}
+        description.text = image.description
+    }
 
-	private fun getPhotoViewHeight(displaySize: Point, photoWidth: Int, photoHeight: Int): Int {
-		val aspect = photoHeight / photoWidth.toFloat()
-		// Ищем высоту ВЬЮ с учётом аспекта картинки.
-		val neededHeight = (aspect * displaySize.x).toInt()
-		// Ищем максимально дозволеную высоту картинки.
-		val maxHeight = (displaySize.y * MAX_HEIGHT_PHOTO_SCREEN_FACTOR).toInt()
-		return min(neededHeight, maxHeight)
-	}
+    private fun getPhotoViewHeight(displaySize: Point, photoWidth: Int, photoHeight: Int): Int {
+        val aspect = photoHeight / photoWidth.toFloat()
+        // Ищем высоту ВЬЮ с учётом аспекта картинки.
+        val neededHeight = (aspect * displaySize.x).toInt()
+        // Ищем максимально дозволеную высоту картинки.
+        val maxHeight = (displaySize.y * MAX_HEIGHT_PHOTO_SCREEN_FACTOR).toInt()
+        return min(neededHeight, maxHeight)
+    }
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-	private fun getWindowSize(context: Context): Point {
-		val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-		val display = wm.defaultDisplay
-		val size = Point()
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			display.getSize(size)
-		} else {
-			size.x = display.width
-			size.y = display.height
-		}
-		return size
-	}
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private fun getWindowSize(context: Context): Point {
+        val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val display = wm.defaultDisplay
+        val size = Point()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            display.getSize(size)
+        } else {
+            size.x = display.width
+            size.y = display.height
+        }
+        return size
+    }
 }
