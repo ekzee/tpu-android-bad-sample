@@ -22,26 +22,9 @@ import ru.tpu.imgur.databinding.FragmentImgurAlbumsBinding
 import ru.tpu.imgur.ui.AlbumSearchAdapter
 import ru.tpu.imgur.ui.UiImgurAlbum
 
-class ImgurAlbumsFragment : Fragment() {
+class ImgurAlbumsFragment : Fragment(), AlbumSearchPresenter.Widget {
 
-    val imgurApi: ImgurApi
-
-    init {
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(ImgurAppAuthInterceptor())
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.imgur.com/3/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        imgurApi = retrofit.create(ImgurApi::class.java)
-    }
+    val searchRepository: AlbumSearchRepository = App.scope.albumSearchRepository
 
     private var _binding: FragmentImgurAlbumsBinding? = null
     private val binding: FragmentImgurAlbumsBinding
@@ -50,6 +33,8 @@ class ImgurAlbumsFragment : Fragment() {
     private var _adapter: AlbumSearchAdapter? = null
     private val adapter: AlbumSearchAdapter
         get() = _adapter!!
+
+    override var retryLoadingListener: (() -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,15 +49,16 @@ class ImgurAlbumsFragment : Fragment() {
         binding.list.adapter = adapter
 
         binding.errorRetry.setOnClickListener {
-            load()
+            retryLoadingListener?.invoke()
         }
 
-        return binding.root
-    }
+        AlbumSearchPresenter(
+            searchRepository,
+            lifecycle,
+            this
+        )
 
-    override fun onResume() {
-        super.onResume()
-        load()
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -81,44 +67,13 @@ class ImgurAlbumsFragment : Fragment() {
         _adapter = null
     }
 
-    private fun load() {
-        showLoading()
-        GlobalScope.launch {
-            try {
-                delay(2000)
-                val apiAlbums = imgurApi.search("cats", "jpg").execute().body()!!.data!!
-                val uiAlbums = apiAlbums.mapNotNull { imgurApiAlbum: ImgurApiAlbum ->
-                    imgurApiAlbum.images?.forEach { imgurApiImage: ImgurApiImage ->
-                        if (imgurApiImage.type != "image/jpeg" && imgurApiImage.type != "image/png") {
-                            return@forEach
-                        }
-                        return@mapNotNull UiImgurAlbum(
-                            url = imgurApiImage.link,
-                            width = imgurApiImage.width,
-                            height = imgurApiImage.height,
-                            description = imgurApiAlbum.title
-                        )
-                    }
-                    return@mapNotNull null
-                }
-                MainScope().launch {
-                    showLoaded(uiAlbums)
-                }
-            } catch (e: Exception) {
-                MainScope().launch {
-                    showFailed()
-                }
-            }
-        }
-    }
-
-    private fun showLoading() {
+    override fun showLoading() {
         binding.loadingContainer.visibility = View.VISIBLE
         binding.loading.visibility = View.VISIBLE
         binding.errorContainer.visibility = View.GONE
     }
 
-    private fun showLoaded(uiAlbums: List<UiImgurAlbum>) {
+    override fun showLoaded(uiAlbums: List<UiImgurAlbum>) {
         binding.loadingContainer.visibility = View.GONE
 
         adapter.setItems(uiAlbums)
@@ -126,7 +81,7 @@ class ImgurAlbumsFragment : Fragment() {
         binding.list.scrollToPosition(0)
     }
 
-    private fun showFailed() {
+    override fun showFailed() {
         binding.loadingContainer.visibility = View.VISIBLE
         binding.loading.visibility = View.GONE
         binding.errorContainer.visibility = View.VISIBLE

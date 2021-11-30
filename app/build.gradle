@@ -52,6 +52,7 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
     runtimeOnly 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+	implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
 
     implementation "com.facebook.fresco:fresco:2.6.0"
     implementation 'com.facebook.fresco:animated-gif:2.6.0'

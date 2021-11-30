@@ -8,6 +8,6 @@ interface ImgurApi {
     @GET("gallery/search")
     fun search(
         @Query("q_all") query: String,
-        @Query("q_type") type: String
+        @Query("q_type") type: String,
     ): Call<ImgurApiResponse<List<ImgurApiAlbum>>>
 }
