@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="12dp"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btn_notification_show"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_show_notification" />
+
+    <Button
+        android:id="@+id/btn_notification_alarm_manager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_alarm_manager" />
+
+    <Button
+        android:id="@+id/btn_notification_work_manager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_work_manager" />
+
+</LinearLayout>

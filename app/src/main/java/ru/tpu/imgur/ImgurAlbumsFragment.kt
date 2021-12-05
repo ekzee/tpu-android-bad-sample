@@ -6,18 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import ru.tpu.imgur.api.ImgurApi
-import ru.tpu.imgur.api.ImgurApiAlbum
-import ru.tpu.imgur.api.ImgurApiImage
-import ru.tpu.imgur.api.ImgurAppAuthInterceptor
 import ru.tpu.imgur.databinding.FragmentImgurAlbumsBinding
 import ru.tpu.imgur.ui.AlbumSearchAdapter
 import ru.tpu.imgur.ui.UiImgurAlbum
@@ -37,9 +25,9 @@ class ImgurAlbumsFragment : Fragment(), AlbumSearchPresenter.Widget {
     override var retryLoadingListener: (() -> Unit)? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
 
         _adapter = AlbumSearchAdapter()
@@ -53,9 +41,15 @@ class ImgurAlbumsFragment : Fragment(), AlbumSearchPresenter.Widget {
         }
 
         AlbumSearchPresenter(
-            searchRepository,
-            lifecycle,
-            this
+                searchRepository,
+                lifecycle,
+                this
+        )
+
+        NotificationsPresenter(
+                requireContext(),
+                adapter,
+                App.scope.commonChannelId
         )
 
         return binding.root

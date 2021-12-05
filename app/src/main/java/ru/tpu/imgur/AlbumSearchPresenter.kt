@@ -8,9 +8,9 @@ import kotlinx.coroutines.*
 import ru.tpu.imgur.ui.UiImgurAlbum
 
 class AlbumSearchPresenter(
-    private val repository: AlbumSearchRepository,
-    private val lifecycle: Lifecycle,
-    private val widget: Widget
+        private val repository: AlbumSearchRepository,
+        private val lifecycle: Lifecycle,
+        private val widget: Widget
 ) : DefaultLifecycleObserver {
     init {
         lifecycle.addObserver(this)
@@ -26,7 +26,6 @@ class AlbumSearchPresenter(
     private fun loadCats() {
         widget.showLoading()
         lifecycle.coroutineScope.launch {
-            delay(2000)
             val uiAlbumsDeferred = async(Dispatchers.IO) {
                 return@async try {
                     Result.success(repository.search("cats"))
@@ -35,8 +34,8 @@ class AlbumSearchPresenter(
                 }
             }
             uiAlbumsDeferred.await().fold(
-                onSuccess = { uiAlbums: List<UiImgurAlbum> -> widget.showLoaded(uiAlbums) },
-                onFailure = { widget.showFailed() }
+                    onSuccess = { uiAlbums: List<UiImgurAlbum> -> widget.showLoaded(uiAlbums) },
+                    onFailure = { widget.showFailed() }
             )
         }
     }

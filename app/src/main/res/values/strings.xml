@@ -3,4 +3,11 @@
 
     <string name="error_retry">Повторить</string>
     <string name="error_message">Не удалось загрузить данные</string>
+
+    <string name="btn_alarm_manager">Alarm Manager</string>
+    <string name="btn_work_manager">Work Manager</string>
+    <string name="btn_show_notification">show notification</string>
+
+    <string name="common_channel_name">Остальные уведомления</string>
+    <string name="common_channel_description">Описание канала</string>
 </resources>
