@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "825098157058",
+    "project_id": "tputest-bce0e",
+    "storage_bucket": "tputest-bce0e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825098157058:android:a14a91391b5da13fee7b1b",
+        "android_client_info": {
+          "package_name": "ru.tpu.imgur"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825098157058-5e92n1k849f8o0ql65dge44ps80f86iq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtVFqVcZNipHL_LpadMS7EoAqBytX50Jo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825098157058-5e92n1k849f8o0ql65dge44ps80f86iq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

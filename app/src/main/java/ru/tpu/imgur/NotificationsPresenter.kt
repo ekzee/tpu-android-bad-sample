@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.SystemClock
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -51,7 +52,8 @@ class NotificationsPresenter(
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val alarmAt = System.currentTimeMillis() + 30 * 1000
+        val alarmAt = System.currentTimeMillis() + 50 * 1000
+
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmAt, pendingIntent)
     }
 
